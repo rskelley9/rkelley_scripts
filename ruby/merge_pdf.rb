@@ -21,7 +21,7 @@ unless file_type =~ /pdf/ix
 			Libreconv.convert( f, "#{ save_path }#{ File.basename( f ) }", soffice_path )
 		end
 	else
-		puts "#{ soffice_path } was not found."
+		puts "#{ soffice_path } was not found. Must have soffice installed."
 	end
 end
 
