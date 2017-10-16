@@ -12,7 +12,13 @@ save_path = ARGV[ 1 ] || ENV['HOME'] + '/Desktop/'
 file_type = ARGV[2] || ".pdf"
 
 file_type = file_type[ 0 ].eql?( "." ) ? file_type : ( "." + file_type )
-unless file_type =~ /pdf/ix
+if ( file_type =~ /pdf/ix ).nil?
+
+	## abort if odt and Windows
+	if ( /cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM ) && file_type =~ /odt/ix
+		abort( "ABORTED! Can only convert odt files if using Mac OS X" )
+	end
+
 	if File.exists?( soffice_path )
 
 		Dir[ "#{ file_path }/*#{ file_type }" ].each do | f |
@@ -21,7 +27,7 @@ unless file_type =~ /pdf/ix
 			Libreconv.convert( f, "#{ save_path }#{ File.basename( f ) }", soffice_path )
 		end
 	else
-		puts "#{ soffice_path } was not found. Must have soffice installed."
+		abort( "ABORTED! #{ soffice_path } was not found." )
 	end
 end
 
@@ -30,8 +36,7 @@ save_path = File.join( save_path , "")
 
 [ file_path, save_path ].each do | path_string |
 	unless File.directory?( path_string )
-		puts "ERROR: #{ path_string } does not exist!"
-		abort
+		abort( "ABORTED! #{ path_string } does not exist!" )
 	end
 end
 
