@@ -5,16 +5,16 @@ from selenium import webdriver;
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile;
 
 if len(sys.argv) > 1:
-	download_path = sys.argv[1];
+	download_path = os.path.expanduser(sys.argv[1]);
 else:
-	download_path = '~/Desktop';
+	download_path = os.path.expanduser('~/Desktop');
 
-if not os.path.isdir((os.path.expanduser('~/Desktop'))):
+if not os.path.isdir(download_path):
 	sys.exit('Invalid path %s.'%(download_path));
 
 print('File will be saved to %s'%(download_path));
 
-download_file_path = os.path.expanduser((download_path+'/Fangraphs Leaderboard.csv'));
+download_file_path = (download_path+'/Fangraphs Leaderboard.csv');
 ts_file_name = (time.strftime("%Y%m%d")+"_steamer_projections.csv"); ## custom file name
 profile = FirefoxProfile();
 
